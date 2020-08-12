@@ -28,6 +28,8 @@ git_cmd git remote add upstream ${INPUT_UPSTREAM}
 git_cmd git fetch --all
 
 last_sha=$(git_cmd git rev-list -1 upstream/${INPUT_UPSTREAM_BRANCH})
+echo "Last commited SHA: ${last_sha}"
+
 up_to_date=$(git_cmd git rev-list origin/${INPUT_BRANCH} | grep ${last_sha} | wc -l)
 pr_branch="up-${last_sha}"
 
@@ -38,7 +40,7 @@ if [[ "${pr_exists}" -gt 0 ]]; then
  exit 0
 fi
 
-if [[ "${up_to_date}" -gt 0 ]]; then
+if [[ "${up_to_date}" -eq 0 ]]; then
   git_cmd git checkout -b "${pr_branch}" --track "upstream/${INPUT_UPSTREAM_BRANCH}"
   git_cmd git push -u origin "${pr_branch}"
   git_cmd hub pull-request -b "${INPUT_PR_BRANCH}" -h "${pr_branch}" -l "${INPUT_PR_LABELS}" -a "${GITHUB_ACTOR}" -m "\"Upstream: ${last_sha}\""
