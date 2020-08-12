@@ -33,7 +33,9 @@ echo "Last commited SHA: ${last_sha}"
 up_to_date=$(git_cmd git rev-list origin/${INPUT_BRANCH} | grep ${last_sha} | wc -l)
 pr_branch="up-${last_sha}"
 
+hub pr list
 pr_exists=$(git_cmd hub pr list | grep ${last_sha} | wc -l)
+
 if [[ "${pr_exists}" -gt 0 ]]; then
  echo "PR Already exists!!!"
  git_cmd hub pr list | grep ${last_sha}
@@ -43,6 +45,7 @@ fi
 if [[ "${up_to_date}" -eq 0 ]]; then
   git_cmd git checkout -b "${pr_branch}" --track "upstream/${INPUT_UPSTREAM_BRANCH}"
   git_cmd git push -u origin "${pr_branch}"
+  git_cmd git remote remove upstream
   git_cmd hub pull-request -b "${INPUT_BRANCH}" -h "${pr_branch}" -l "${INPUT_PR_LABELS}" -a "${GITHUB_ACTOR}" -m "\"Upstream: ${last_sha}\""
 else
   echo "Branch up-to-date"
