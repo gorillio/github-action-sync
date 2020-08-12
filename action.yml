@@ -1,0 +1,23 @@
+name: 'Create PR from upstream repos for private forks'
+description: 'Create PR from upstream repos for private forks'
+author: '@himadrisingh'
+inputs:
+  upstream:
+    description: 'Upstream repo'
+    required: true
+  upstream_branch:
+    description: 'Upstream branch to pull from'
+    required: true
+  branch:
+    description: 'Branch to merge to'
+    required: true
+  pr_labels:
+    description: 'Labels for the new PR'
+    required: false
+    default: 'autocreated'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+branding:
+  icon: git-merge
+  color: yellow
