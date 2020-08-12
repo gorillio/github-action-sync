@@ -43,7 +43,7 @@ fi
 if [[ "${up_to_date}" -eq 0 ]]; then
   git_cmd git checkout -b "${pr_branch}" --track "upstream/${INPUT_UPSTREAM_BRANCH}"
   git_cmd git push -u origin "${pr_branch}"
-  git_cmd hub pull-request -b "${INPUT_PR_BRANCH}" -h "${pr_branch}" -l "${INPUT_PR_LABELS}" -a "${GITHUB_ACTOR}" -m "\"Upstream: ${last_sha}\""
+  git_cmd hub pull-request -b "${INPUT_BRANCH}" -h "${pr_branch}" -l "${INPUT_PR_LABELS}" -a "${GITHUB_ACTOR}" -m "\"Upstream: ${last_sha}\""
 else
   echo "Branch up-to-date"
   exit 0
